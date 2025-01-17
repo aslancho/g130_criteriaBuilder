@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<head>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<div layout:fragment="content">
+  <form action="/" method="get">
+    <table class="table table-striped aligned-table">
+      <thead>
+      <tr>
+        <th>Заголовок</th>
+        <th>Бренд</th>
+        <th>Память</th>
+        <th>ОЗУ</th>
+        <th>Цена</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          <input type="text"
+                 name="title"
+                 class="form-control"
+                 th:value="${selectedTitle}"
+                 placeholder="Поиск по заголовку"/>
+        </td>
+        <td>
+          <select name="brand" class="form-control">
+            <option value="" th:selected="${selectedBrand == null}">Все</option>
+            <option th:each="brand : ${allSmartphoneBrands}"
+                    th:value="${brand}"
+                    th:text="${brand}"
+                    th:selected="${brand == selectedBrand}">
+            </option>
+          </select>
+        </td>
+        <td>
+          <select name="memory" class="form-control">
+            <option value="" th:selected="${selectedMemory == null}">Все</option>
+            <option th:each="memory : ${allSmartphoneMemories}"
+                    th:value="${memory}"
+                    th:text="${memory}"
+                    th:selected="${memory == selectedMemory}">
+            </option>
+          </select>
+        </td>
+        <td>
+          <select name="ram" class="form-control">
+            <option value="" th:selected="${selectedRam == null}">Все</option>
+            <option th:each="ram : ${allSmartphoneRams}"
+                    th:value="${ram}"
+                    th:text="${ram}"
+                    th:selected="${ram == selectedRam}">
+            </option>
+          </select>
+        </td>
+        <td>
+          <select name="priceRange" class="form-control">
+            <option value="" th:selected="${selectedPriceRange == null}">Все</option>
+            <option value="0-200000" th:selected="${selectedPriceRange == '0-200000'}">До 200 000 ₸</option>
+            <option value="200000-500000" th:selected="${selectedPriceRange == '200000-500000'}">200 000 ₸ - 500 000 ₸</option>
+            <option value="500000-800000" th:selected="${selectedPriceRange == '500000-800000'}">500 000 ₸ - 800 000 ₸</option>
+            <option value="800000-999999999" th:selected="${selectedPriceRange == '800000-999999999'}">От 800 000 ₸</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn btn-primary">Применить</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+  <table class="table table-striped aligned-table">
+    <thead>
+    <tr>
+      <th>Заголовок</th>
+      <th>Бренд</th>
+      <th>Память</th>
+      <th>ОЗУ</th>
+      <th>Цена</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="smartphone : ${smartphones}">
+      <td th:text="${smartphone.title}"></td>
+      <td th:text="${smartphone.brand}"></td>
+      <td th:text="${smartphone.memory}"></td>
+      <td th:text="${smartphone.ram}"></td>
+      <td th:text="${smartphone.price}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</html>

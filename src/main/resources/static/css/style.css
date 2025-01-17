@@ -1,0 +1,24 @@
+.aligned-table th:nth-child(1),
+.aligned-table td:nth-child(1) {
+    width: 30%; /* Колонка "Заголовок" */
+}
+
+.aligned-table th:nth-child(2),
+.aligned-table td:nth-child(2) {
+    width: 15%; /* Колонка "Бренд" */
+}
+
+.aligned-table th:nth-child(3),
+.aligned-table td:nth-child(3) {
+    width: 15%; /* Колонка "Память" */
+}
+
+.aligned-table th:nth-child(4),
+.aligned-table td:nth-child(4) {
+    width: 15%; /* Колонка "ОЗУ" */
+}
+
+.aligned-table th:nth-child(5),
+.aligned-table td:nth-child(5) {
+    width: 25%; /* Колонка "Цена" */
+}
