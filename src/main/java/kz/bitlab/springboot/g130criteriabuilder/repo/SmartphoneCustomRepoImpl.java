@@ -1,7 +1,6 @@
 package kz.bitlab.springboot.g130criteriabuilder.repo;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import kz.bitlab.springboot.g130criteriabuilder.entity.Brand;
@@ -9,18 +8,18 @@ import kz.bitlab.springboot.g130criteriabuilder.entity.Smartphone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Override
     public Page<Smartphone> dynamicSearch(Smartphone filteredSmartphone, Pageable pageable) {
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Smartphone> cq = cb.createQuery(Smartphone.class);
         Root<Smartphone> root = cq.from(Smartphone.class); // FROM smartphones

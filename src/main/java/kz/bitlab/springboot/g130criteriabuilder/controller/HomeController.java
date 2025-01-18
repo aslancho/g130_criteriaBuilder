@@ -10,11 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,16 +20,16 @@ public class HomeController {
     private final BrandService brandService;
 
     @GetMapping("/")
-    public String home( @RequestParam(required = false, defaultValue = "0") int page,
-                        @RequestParam(required = false, defaultValue = "10") int size,
+    public String home(@RequestParam(required = false, defaultValue = "0") int page,
+                       @RequestParam(required = false, defaultValue = "5") int size,
 
-                        @RequestParam(required = false) String title,
-                        @RequestParam(required = false) String brandName,
-                        @RequestParam(required = false) Integer memory,
-                        @RequestParam(required = false) Integer ram,
+                       @RequestParam(required = false) String title,
+                       @RequestParam(required = false) String brandName,
+                       @RequestParam(required = false) Integer memory,
+                       @RequestParam(required = false) Integer ram,
 
-                        @RequestParam(required = false) String priceRange,
-                        Model model) {
+                       @RequestParam(required = false) String priceRange,
+                       Model model) {
 
         Smartphone filteredSmartphone = new Smartphone();
         filteredSmartphone.setTitle(title);

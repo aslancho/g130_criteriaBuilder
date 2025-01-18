@@ -4,7 +4,6 @@ import kz.bitlab.springboot.g130criteriabuilder.entity.Brand;
 import kz.bitlab.springboot.g130criteriabuilder.repo.BrandRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
