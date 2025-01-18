@@ -1,6 +1,8 @@
 package kz.bitlab.springboot.g130criteriabuilder.controller;
 
+import kz.bitlab.springboot.g130criteriabuilder.entity.Brand;
 import kz.bitlab.springboot.g130criteriabuilder.entity.Smartphone;
+import kz.bitlab.springboot.g130criteriabuilder.service.BrandService;
 import kz.bitlab.springboot.g130criteriabuilder.service.SmartphoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,19 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final SmartphoneService smartphoneService;
+    private final BrandService brandService;
 
     @GetMapping("/")
     public String home(
-            @RequestParam(required = false) String sortField,
-            @RequestParam(required = false) String sortDirection,
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String brandName,
             @RequestParam(required = false) Integer memory,
             @RequestParam(required = false) Integer ram,
             @RequestParam(required = false) String priceRange,
@@ -31,9 +34,13 @@ public class HomeController {
         // Создаем объект фильтра
         Smartphone filteredSmartphone = new Smartphone();
         filteredSmartphone.setTitle(title);
-        filteredSmartphone.setBrand(brand);
         filteredSmartphone.setMemory(memory);
         filteredSmartphone.setRam(ram);
+
+        if (brandName != null && !brandName.isEmpty()) {
+            Brand brand = brandService.getBrandByName(brandName);
+            filteredSmartphone.setBrand(brand);
+        }
 
         // Парсим диапазон цен
         if (priceRange != null && !priceRange.isEmpty()) {
@@ -52,23 +59,21 @@ public class HomeController {
         List<Smartphone> smartphones = smartphoneService.dynamicSearch(filteredSmartphone);
 
         // Получаем данные для фильтров
-        Set<String> allSmartphoneBrands = smartphoneService.getAllSmartphoneBrands();
+        Set<String> allSmartphoneBrands = brandService.getAllBrandNames();
         Set<Integer> allSmartphoneMemories = smartphoneService.getAllSmartphoneMemories();
         Set<Integer> allSmartphoneRams = smartphoneService.getAllSmartphoneRams();
 
         // Добавляем данные в модель
-        model.addAttribute("allSmartphoneBrands", allSmartphoneBrands);
+        model.addAttribute("allSmartphoneBrandNames", allSmartphoneBrands);
         model.addAttribute("allSmartphoneMemories", allSmartphoneMemories);
         model.addAttribute("allSmartphoneRams", allSmartphoneRams);
 
         model.addAttribute("smartphones", smartphones);
-        model.addAttribute("selectedBrand", brand);
+        model.addAttribute("selectedBrand", brandName);
         model.addAttribute("selectedMemory", memory);
         model.addAttribute("selectedRam", ram);
         model.addAttribute("selectedTitle", title);
         model.addAttribute("selectedPriceRange", priceRange);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDirection", sortDirection);
 
         return "home";
     }

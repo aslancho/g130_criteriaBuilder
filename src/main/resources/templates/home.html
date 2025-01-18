@@ -28,9 +28,9 @@
                  placeholder="Поиск по заголовку"/>
         </td>
         <td>
-          <select name="brand" class="form-control">
+          <select name="brandName" class="form-control">
             <option value="" th:selected="${selectedBrand == null}">Все</option>
-            <option th:each="brand : ${allSmartphoneBrands}"
+            <option th:each="brand : ${allSmartphoneBrandNames}"
                     th:value="${brand}"
                     th:text="${brand}"
                     th:selected="${brand == selectedBrand}">
@@ -87,7 +87,7 @@
     <tbody>
     <tr th:each="smartphone : ${smartphones}">
       <td th:text="${smartphone.title}"></td>
-      <td th:text="${smartphone.brand}"></td>
+      <td th:text="${smartphone.brand.name}"></td>
       <td th:text="${smartphone.memory}"></td>
       <td th:text="${smartphone.ram}"></td>
       <td th:text="${smartphone.price}"></td>

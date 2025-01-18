@@ -2,10 +2,8 @@ package kz.bitlab.springboot.g130criteriabuilder.repo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
+import kz.bitlab.springboot.g130criteriabuilder.entity.Brand;
 import kz.bitlab.springboot.g130criteriabuilder.entity.Smartphone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,7 +21,7 @@ public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
     public List<Smartphone> dynamicSearch(Smartphone smartphone) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Smartphone> cq = cb.createQuery(Smartphone.class);
-        Root<Smartphone> root = cq.from(Smartphone.class);
+        Root<Smartphone> root = cq.from(Smartphone.class); // FROM smartphones
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -34,8 +32,9 @@ public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
             }
         }
 
-        if (smartphone.getBrand() != null && !smartphone.getBrand().isEmpty()) {
-            predicates.add(cb.equal(root.get("brand"), smartphone.getBrand()));
+        if (smartphone.getBrand() != null) {
+            Join<Smartphone, Brand> brandJoin = root.join("brand");
+            predicates.add(cb.equal(brandJoin.get("name"), smartphone.getBrand().getName()));
         }
 
         if (smartphone.getMemory() != null) {

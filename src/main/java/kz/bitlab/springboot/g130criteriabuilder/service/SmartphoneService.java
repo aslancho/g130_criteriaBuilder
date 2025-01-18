@@ -17,20 +17,8 @@ public class SmartphoneService {
 
     private final SmartphoneRepo smartphoneRepo;
 
-    public List<Smartphone> getAllSmartphones() {
-        return smartphoneRepo.findAll();
-    }
-
-    public List<Smartphone> getSmartphonesByTitleContainingIgnoreCase(String title) {
-        return smartphoneRepo.findByTitleContainingIgnoreCase(title);
-    }
-
     public List<Smartphone> dynamicSearch(Smartphone smartphone) {
         return smartphoneRepo.dynamicSearch(smartphone);
-    }
-
-    public Set<String> getAllSmartphoneBrands() {
-        return smartphoneRepo.findAll().stream().map(Smartphone::getBrand).sorted().collect(Collectors.toCollection(TreeSet::new));
     }
 
     public Set<Integer> getAllSmartphoneMemories() {
@@ -40,5 +28,4 @@ public class SmartphoneService {
     public Set<Integer> getAllSmartphoneRams() {
         return smartphoneRepo.findAll().stream().map(Smartphone::getRam).sorted().collect(Collectors.toCollection(TreeSet::new));
     }
-
 }

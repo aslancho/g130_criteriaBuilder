@@ -16,14 +16,20 @@ public class Smartphone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "TITLE", nullable = false)
     private String title;
 
-    private String brand;
+    @JoinColumn(name = "BRAND_ID")
+    @ManyToOne
+    private Brand brand;
 
+    @Column(name = "MEMORY")
     private Integer memory;
 
+    @Column(name = "RAM")
     private Integer ram;
 
+    @Column(name = "PRICE")
     private Double price;
 
     @Transient
@@ -31,5 +37,4 @@ public class Smartphone {
 
     @Transient
     private Double maxPrice;
-
 }
