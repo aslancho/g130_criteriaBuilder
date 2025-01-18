@@ -85,14 +85,24 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="smartphone : ${smartphones}">
+    <tr th:each="smartphone : ${smartphonePage.getContent()}">
       <td th:text="${smartphone.title}"></td>
       <td th:text="${smartphone.brand.name}"></td>
       <td th:text="${smartphone.memory}"></td>
       <td th:text="${smartphone.ram}"></td>
       <td th:text="${smartphone.price}"></td>
     </tr>
+
     </tbody>
   </table>
+
+  <div style="text-align: center; margin-top: 20px;" class="pagination">
+    <a th:if="${smartphonePage.hasPrevious()}"
+       th:href="@{|/?page=${smartphonePage.number - 1}&size=${smartphonePage.size}|}">Предыдущая</a>
+    <span th:text="'Страница ' + ${smartphonePage.number + 1} + ' из ' + ${smartphonePage.totalPages}"></span>
+    <a th:if="${smartphonePage.hasNext()}"
+       th:href="@{|/?page=${smartphonePage.number + 1}&size=${smartphonePage.size}|}">Следующая</a>
+  </div>
+
 </div>
 </html>

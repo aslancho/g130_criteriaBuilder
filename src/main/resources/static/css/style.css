@@ -22,3 +22,24 @@
 .aligned-table td:nth-child(5) {
     width: 25%; /* Колонка "Цена" */
 }
+.pagination {
+    display: flex; /* Используем flexbox для выравнивания */
+    justify-content: center; /* Центрируем содержимое */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+.pagination a,
+.pagination span {
+    margin: 0 10px; /* Отступ между элементами */
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+    color: #007bff; /* Цвет ссылок */
+}
+
+.pagination a:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+    color: #0056b3; /* Темный оттенок при наведении */
+}
+
+.pagination span {
+    font-weight: bold; /* Выделяем текущую страницу жирным */
+}

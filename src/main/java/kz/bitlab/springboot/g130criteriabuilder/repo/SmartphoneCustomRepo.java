@@ -1,11 +1,10 @@
 package kz.bitlab.springboot.g130criteriabuilder.repo;
 
 import kz.bitlab.springboot.g130criteriabuilder.entity.Smartphone;
-
-import java.util.List;
+import org.springframework.data.domain.*;
 
 public interface SmartphoneCustomRepo {
 
-    List<Smartphone> dynamicSearch(Smartphone smartphone);
+    Page<Smartphone> dynamicSearch(Smartphone filteredSmartphone, Pageable pageable);
 
 }
