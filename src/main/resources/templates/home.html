@@ -5,6 +5,7 @@
 <head>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+<body>
 <div layout:fragment="content">
   <form action="/" method="get">
     <table class="table table-striped aligned-table">
@@ -96,13 +97,51 @@
     </tbody>
   </table>
 
-  <div style="text-align: center; margin-top: 20px;" class="pagination">
-    <a th:if="${smartphonePage.hasPrevious()}"
-       th:href="@{|/?page=${smartphonePage.number - 1}&size=${smartphonePage.size}|}">Предыдущая</a>
-    <span th:text="'Страница ' + ${smartphonePage.number + 1} + ' из ' + ${smartphonePage.totalPages}"></span>
-    <a th:if="${smartphonePage.hasNext()}"
-       th:href="@{|/?page=${smartphonePage.number + 1}&size=${smartphonePage.size}|}">Следующая</a>
+  <div class="pagination">
+    <ul>
+      <!-- Previous button -->
+      <li th:if="${smartphonePage.hasPrevious()}">
+        <a th:href="@{/(page=${smartphonePage.number - 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">Предыдущая</a>
+      </li>
+
+      <!-- Первая страница, только если текущая страница больше 1 -->
+      <li th:if="${smartphonePage.number > 1}">
+        <a th:href="@{/(page=0, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">1</a>
+      </li>
+
+      <!-- Многоточие перед текущей страницей, если она больше 2 -->
+      <li th:if="${smartphonePage.number > 2}">
+        <span>...</span>
+      </li>
+
+      <!-- Отображение текущей страницы и трех следующих -->
+      <li th:each="i : ${#numbers.sequence(smartphonePage.number, (smartphonePage.totalPages - 1 < smartphonePage.number + 3 ? smartphonePage.totalPages - 1 : smartphonePage.number + 3))}">
+        <a th:if="${i != smartphonePage.number}"
+           th:href="@{/(page=${i}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}"
+           th:text="${i + 1}">1</a>
+        <span th:if="${i == smartphonePage.number}" th:text="${i + 1}" class="active">1</span>
+      </li>
+
+      <!-- Многоточие после текущей страницы, если дальше есть страницы кроме последней -->
+      <li th:if="${smartphonePage.number + 3 < smartphonePage.totalPages - 2}">
+        <span>...</span>
+      </li>
+
+      <!-- Последняя страница, если она не входит в показанные -->
+      <li th:if="${smartphonePage.number + 3 < smartphonePage.totalPages - 1}">
+        <a th:href="@{/(page=${smartphonePage.totalPages - 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}"
+           th:text="${smartphonePage.totalPages}">1</a>
+      </li>
+
+      <!-- Next button -->
+      <li th:if="${smartphonePage.hasNext()}">
+        <a th:href="@{/(page=${smartphonePage.number + 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">Следующая</a>
+      </li>
+    </ul>
   </div>
 
+
+
 </div>
+</body>
 </html>

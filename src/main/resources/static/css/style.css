@@ -1,45 +1,71 @@
-.aligned-table th:nth-child(1),
-.aligned-table td:nth-child(1) {
-    width: 30%; /* Колонка "Заголовок" */
+.pagination ul {
+    display: flex; /* Выравниваем элементы в строку */
+    list-style: none; /* Убираем маркеры */
+    justify-content: center; /* Центрируем список */
+    padding: 0;
+    margin: 0;
 }
 
-.aligned-table th:nth-child(2),
-.aligned-table td:nth-child(2) {
-    width: 15%; /* Колонка "Бренд" */
+.pagination li {
+    margin: 0 5px; /* Отступ между элементами */
 }
 
-.aligned-table th:nth-child(3),
-.aligned-table td:nth-child(3) {
-    width: 15%; /* Колонка "Память" */
-}
-
-.aligned-table th:nth-child(4),
-.aligned-table td:nth-child(4) {
-    width: 15%; /* Колонка "ОЗУ" */
-}
-
-.aligned-table th:nth-child(5),
-.aligned-table td:nth-child(5) {
-    width: 25%; /* Колонка "Цена" */
-}
-.pagination {
-    display: flex; /* Используем flexbox для выравнивания */
-    justify-content: center; /* Центрируем содержимое */
-    margin-top: 20px; /* Отступ сверху */
-}
-
-.pagination a,
-.pagination span {
-    margin: 0 10px; /* Отступ между элементами */
-    text-decoration: none; /* Убираем подчеркивание ссылок */
-    color: #007bff; /* Цвет ссылок */
+.pagination a, .pagination span {
+    text-decoration: none;
+    padding: 5px 10px;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 .pagination a:hover {
-    text-decoration: underline; /* Подчеркивание при наведении */
-    color: #0056b3; /* Темный оттенок при наведении */
+    background-color: #f1f1f1;
+    color: #0056b3;
 }
 
-.pagination span {
-    font-weight: bold; /* Выделяем текущую страницу жирным */
+.pagination li.active a,
+.pagination li.active span {
+    background-color: #007bff; /* Синий фон */
+    color: white; /* Белый текст */
+    border: 1px solid #007bff;
+    font-weight: bold;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination a, .pagination span {
+    text-decoration: none;
+    padding: 8px 12px;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pagination a:hover {
+    background-color: #f1f1f1;
+    color: #0056b3;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+

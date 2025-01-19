@@ -6,6 +6,7 @@ import kz.bitlab.springboot.g130criteriabuilder.service.BrandService;
 import kz.bitlab.springboot.g130criteriabuilder.service.SmartphoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,7 +69,7 @@ public class HomeController {
         model.addAttribute("selectedTitle", title);
         model.addAttribute("selectedPriceRange", priceRange);
 
-        Page<Smartphone> smartphonePage = smartphoneService.getSmartphonesPage(filteredSmartphone, page, size);
+        Page<Smartphone> smartphonePage = smartphoneService.getSmartphonesPage(filteredSmartphone, PageRequest.of(page, size));
         model.addAttribute("smartphonePage", smartphonePage);
 
         return "home";

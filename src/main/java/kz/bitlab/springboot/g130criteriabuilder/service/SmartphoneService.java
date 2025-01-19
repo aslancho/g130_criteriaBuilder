@@ -33,8 +33,7 @@ public class SmartphoneService {
     }
 
     // Пагинация
-    public Page<Smartphone> getSmartphonesPage(Smartphone filteredSmartphone, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<Smartphone> getSmartphonesPage(Smartphone filteredSmartphone, Pageable pageable) {
         return smartphoneRepo.dynamicSearch(filteredSmartphone, pageable);
     }
 
