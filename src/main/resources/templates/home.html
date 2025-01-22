@@ -16,7 +16,7 @@
         <th>Память</th>
         <th>ОЗУ</th>
         <th>Цена</th>
-        <th></th>
+        <th>Сортировка</th>
       </tr>
       </thead>
       <tbody>
@@ -67,6 +67,26 @@
             <option value="800000-999999999" th:selected="${selectedPriceRange == '800000-999999999'}">От 800 000 ₸</option>
           </select>
         </td>
+
+        <td>
+        <select name="sortField" class="form-control">
+          <option th:each="option : ${sortOptions}"
+                  th:value="${option.field}"
+                  th:text="${option.label}"
+                  th:selected="${option.field == selectedSortField}">
+          </option>
+        </select>
+        </td>
+        <td>
+        <select name="sortDirection" class="form-control">
+          <option th:each="direction : ${sortDirections}"
+                  th:value="${direction.key}"
+                  th:text="${direction.value}"
+                  th:selected="${direction.key == selectedSortDirection}">
+          </option>
+        </select>
+        </td>
+
         <td>
           <button class="btn btn-primary">Применить</button>
         </td>
@@ -74,6 +94,9 @@
       </tbody>
     </table>
   </form>
+
+  <a th:text="'В общем найдено ' + ${smartphonePage.getTotalElements()} + ' смартфонов | '"></a><a th:text="'На этой странице ' + ${smartphonePage.getNumberOfElements()} + ' смартфонов'"></a>
+
   <table class="table table-striped aligned-table">
     <thead>
     <tr>
@@ -101,12 +124,31 @@
     <ul>
       <!-- Previous button -->
       <li th:if="${smartphonePage.hasPrevious()}">
-        <a th:href="@{/(page=${smartphonePage.number - 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">Предыдущая</a>
+        <a th:href="@{/(
+        page=${smartphonePage.number - 1},
+        size=${smartphonePage.size},
+        title=${selectedTitle},
+        brandName=${selectedBrand},
+        memory=${selectedMemory},
+        ram=${selectedRam},
+        priceRange=${selectedPriceRange},
+        sortField=${selectedSortField},
+        sortDirection=${selectedSortDirection}
+        )}">Предыдущая</a>
       </li>
 
       <!-- Первая страница, только если текущая страница больше 1 -->
       <li th:if="${smartphonePage.number > 1}">
-        <a th:href="@{/(page=0, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">1</a>
+        <a th:href="@{/(
+        page=0, size=${smartphonePage.size},
+        title=${selectedTitle},
+        brandName=${selectedBrand},
+        memory=${selectedMemory},
+        ram=${selectedRam},
+        priceRange=${selectedPriceRange},
+        sortField=${selectedSortField},
+        sortDirection=${selectedSortDirection}
+        )}">1</a>
       </li>
 
       <!-- Многоточие перед текущей страницей, если она больше 2 -->
@@ -117,7 +159,17 @@
       <!-- Отображение текущей страницы и трех следующих -->
       <li th:each="i : ${#numbers.sequence(smartphonePage.number, (smartphonePage.totalPages - 1 < smartphonePage.number + 3 ? smartphonePage.totalPages - 1 : smartphonePage.number + 3))}">
         <a th:if="${i != smartphonePage.number}"
-           th:href="@{/(page=${i}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}"
+           th:href="@{/(
+            page=${i},
+            size=${smartphonePage.size},
+            title=${selectedTitle},
+            brandName=${selectedBrand},
+            memory=${selectedMemory},
+            ram=${selectedRam},
+            priceRange=${selectedPriceRange},
+            sortField=${selectedSortField},
+            sortDirection=${selectedSortDirection}
+           )}"
            th:text="${i + 1}">1</a>
         <span th:if="${i == smartphonePage.number}" th:text="${i + 1}" class="active">1</span>
       </li>
@@ -129,13 +181,33 @@
 
       <!-- Последняя страница, если она не входит в показанные -->
       <li th:if="${smartphonePage.number + 3 < smartphonePage.totalPages - 1}">
-        <a th:href="@{/(page=${smartphonePage.totalPages - 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}"
+        <a th:href="@{/(
+        page=${smartphonePage.totalPages - 1},
+        size=${smartphonePage.size},
+        title=${selectedTitle},
+        brandName=${selectedBrand},
+        memory=${selectedMemory},
+        ram=${selectedRam},
+        priceRange=${selectedPriceRange},
+        sortField=${selectedSortField},
+        sortDirection=${selectedSortDirection}
+        )}"
            th:text="${smartphonePage.totalPages}">1</a>
       </li>
 
       <!-- Next button -->
       <li th:if="${smartphonePage.hasNext()}">
-        <a th:href="@{/(page=${smartphonePage.number + 1}, size=${smartphonePage.size}, title=${selectedTitle}, brandName=${selectedBrand}, memory=${selectedMemory}, ram=${selectedRam}, priceRange=${selectedPriceRange})}">Следующая</a>
+        <a th:href="@{/(
+        page=${smartphonePage.number + 1},
+        size=${smartphonePage.size},
+        title=${selectedTitle},
+        brandName=${selectedBrand},
+        memory=${selectedMemory},
+        ram=${selectedRam},
+        priceRange=${selectedPriceRange},
+        sortField=${selectedSortField},
+        sortDirection=${selectedSortDirection}
+        )}">Следующая</a>
       </li>
     </ul>
   </div>

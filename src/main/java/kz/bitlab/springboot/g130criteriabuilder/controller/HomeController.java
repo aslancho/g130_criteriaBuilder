@@ -5,15 +5,20 @@ import kz.bitlab.springboot.g130criteriabuilder.dto.PageRequestDTO;
 import kz.bitlab.springboot.g130criteriabuilder.dto.SmartphoneFilterDTO;
 import kz.bitlab.springboot.g130criteriabuilder.entity.Brand;
 import kz.bitlab.springboot.g130criteriabuilder.entity.Smartphone;
+import kz.bitlab.springboot.g130criteriabuilder.model.SortOption;
 import kz.bitlab.springboot.g130criteriabuilder.service.BrandService;
 import kz.bitlab.springboot.g130criteriabuilder.service.SmartphoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +34,7 @@ public class HomeController {
                        Model model) {
 
         Smartphone filteredSmartphone = createFilteredSmartphone(filter);
-        addAttributesToModel(model, filter);
+        addAttributesToModel(model, filter, pageRequest);
 
         Page<Smartphone> smartphonePage = smartphoneService
                 .getSmartphonesPage(filteredSmartphone, pageRequest.toPageRequest());
@@ -68,7 +73,7 @@ public class HomeController {
         }
     }
 
-    private void addAttributesToModel(Model model, SmartphoneFilterDTO filter) {
+    private void addAttributesToModel(Model model, SmartphoneFilterDTO filter, PageRequestDTO pageRequest) {
         model.addAttribute("allSmartphoneBrandNames", brandService.getAllBrandNames());
         model.addAttribute("allSmartphoneMemories", smartphoneService.getAllSmartphoneMemories());
         model.addAttribute("allSmartphoneRams", smartphoneService.getAllSmartphoneRams());
@@ -78,5 +83,25 @@ public class HomeController {
         model.addAttribute("selectedRam", filter.getRam());
         model.addAttribute("selectedTitle", filter.getTitle());
         model.addAttribute("selectedPriceRange", filter.getPriceRange());
+
+        model.addAttribute("selectedSortField", pageRequest.getSortField());
+        model.addAttribute("selectedSortDirection", pageRequest.getSortDirection());
+
+        // Заменяем простой список полей на список опций
+        List<SortOption> sortOptions = List.of(
+                new SortOption("title", "По названию"),
+                new SortOption("price", "По цене"),
+                new SortOption("memory", "По памяти"),
+                new SortOption("ram", "По оперативной памяти")
+        );
+        model.addAttribute("sortOptions", sortOptions);
+
+        // Для направления сортировки используем Map
+        Map<String, String> sortDirections = Map.of(
+                "ASC", "По возрастанию",
+                "DESC", "По убыванию"
+        );
+        model.addAttribute("sortDirections", sortDirections);
+
     }
 }

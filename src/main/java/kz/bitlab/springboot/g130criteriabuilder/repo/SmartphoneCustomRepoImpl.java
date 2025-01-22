@@ -19,45 +19,27 @@ public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
 
     @Override
     public Page<Smartphone> dynamicSearch(Smartphone filteredSmartphone, Pageable pageable) {
-
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Smartphone> cq = cb.createQuery(Smartphone.class);
-        Root<Smartphone> root = cq.from(Smartphone.class); // FROM smartphones
+        Root<Smartphone> root = cq.from(Smartphone.class);
 
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (filteredSmartphone.getTitle() != null && !filteredSmartphone.getTitle().isEmpty()) {
-            String[] words = filteredSmartphone.getTitle().toLowerCase().split("\\s+"); // Разделяем на слова
-            for (String word : words) {
-                predicates.add(cb.like(cb.lower(root.get("title")), "%" + word + "%"));
-            }
-        }
-
-        if (filteredSmartphone.getBrand() != null) {
-            Join<Smartphone, Brand> brandJoin = root.join("brand");
-            predicates.add(cb.equal(brandJoin.get("name"), filteredSmartphone.getBrand().getName()));
-        }
-
-        if (filteredSmartphone.getMemory() != null) {
-            predicates.add(cb.equal(root.get("memory"), filteredSmartphone.getMemory()));
-        }
-
-        if (filteredSmartphone.getRam() != null) {
-            predicates.add(cb.equal(root.get("ram"), filteredSmartphone.getRam()));
-        }
-
-        if (filteredSmartphone.getMinPrice() != null && filteredSmartphone.getMaxPrice() != null) {
-            predicates.add(
-                    cb.between(root.get("price"),
-                            filteredSmartphone.getMinPrice(),
-                            filteredSmartphone.getMaxPrice())
-            );
-        }
-
+        List<Predicate> predicates = createPredicates(filteredSmartphone, cb, root);
         cq.where(predicates.toArray(new Predicate[0]));
 
-        TypedQuery<Smartphone> query = entityManager.createQuery(cq);
+        // Добавляем сортировку
+        if (pageable.getSort().isSorted()) {
+            List<Order> orders = new ArrayList<>();
+            pageable.getSort().forEach(sort -> {
+                if (sort.isAscending()) {
+                    orders.add(cb.asc(root.get(sort.getProperty())));
+                } else {
+                    orders.add(cb.desc(root.get(sort.getProperty())));
+                }
+            });
+            cq.orderBy(orders);
+        }
 
+        TypedQuery<Smartphone> query = entityManager.createQuery(cq);
         query.setFirstResult((int) pageable.getOffset());
         query.setMaxResults(pageable.getPageSize());
 
@@ -70,6 +52,15 @@ public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Smartphone> root = countQuery.from(Smartphone.class);
 
+        List<Predicate> predicates = createPredicates(filter, cb, root);
+
+        countQuery.select(cb.count(root));
+        countQuery.where(predicates.toArray(new Predicate[0]));
+
+        return entityManager.createQuery(countQuery).getSingleResult();
+    }
+
+    private List<Predicate> createPredicates(Smartphone filter, CriteriaBuilder cb, Root<Smartphone> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.getTitle() != null && !filter.getTitle().isEmpty()) {
@@ -93,14 +84,13 @@ public class SmartphoneCustomRepoImpl implements SmartphoneCustomRepo {
         }
 
         if (filter.getMinPrice() != null && filter.getMaxPrice() != null) {
-            predicates.add(cb.between(root.get("price"),
-                    filter.getMinPrice(),
-                    filter.getMaxPrice()));
+            predicates.add(
+                    cb.between(root.get("price"),
+                            filter.getMinPrice(),
+                            filter.getMaxPrice())
+            );
         }
 
-        countQuery.select(cb.count(root));
-        countQuery.where(predicates.toArray(new Predicate[0]));
-
-        return entityManager.createQuery(countQuery).getSingleResult();
+        return predicates;
     }
 }
